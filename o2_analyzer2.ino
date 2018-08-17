@@ -31,12 +31,26 @@ RunningAverage RA(RA_SIZE);
 
 Adafruit_ADS1115 ads(0x48);
 
+//4 pin display
 #define OLED_RESET 4
 Adafruit_SSD1306 display(OLED_RESET);
 
+/*
+//8 Pin SPI display
+//Please note the changed pinouts!
+// If using software SPI (the default case):
+#define OLED_MOSI   9
+#define OLED_CLK   10
+#define OLED_DC    11
+#define OLED_CS    12
+#define OLED_RESET 13
+Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+*/
+
+//CHANGED PINOUTS TO ALLOW FOR 8 PIN SPI DISPLAY
 const int buttonPin=2; // push button
-const int buzzer = 9; // buzzer
-const int ledPin = 13; // led
+const int buzzer = 7; // buzzer
+const int ledPin = 6; // led
 
 double calibrationv;
 float multiplier;
@@ -90,8 +104,12 @@ void setup(void) {
   // ACSR = B10000000;
   // Disable digital input buffers on all analog input pins
   // DIDR0 = DIDR0 | B00111111;
-
+	
+  // 4 pin display	
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+	
+  // 8 pin display
+  display.begin(SSD1306_SWITCHCAPVCC);	
   
   ads.setGain(GAIN_TWO);
   multiplier = 0.0625F;
